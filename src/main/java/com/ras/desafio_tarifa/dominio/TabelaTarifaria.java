@@ -16,11 +16,14 @@ public class TabelaTarifaria {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(nullable = false)
   private String nome;
 
+  @Column(nullable = false)
   private LocalDate dataVigencia;
 
-  private Boolean ativa;
+  @Column(nullable = false)
+  private boolean ativa;
 
   @OneToMany(mappedBy = "tabelaTarifaria", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Faixa> faixas = new ArrayList<>();

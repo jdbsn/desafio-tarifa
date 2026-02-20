@@ -1,4 +1,4 @@
-package com.ras.desafio_tarifa.repositorio;
+package com.ras.desafio_tarifa.infra;
 
 import com.ras.desafio_tarifa.dominio.Categoria;
 import com.ras.desafio_tarifa.dominio.Faixa;
@@ -18,7 +18,7 @@ public final class TabelaMapper {
 
     tabela.setNome(request.nome());
     tabela.setDataVigencia(request.dataVigencia());
-    tabela.setAtiva(request.ativa());
+    tabela.setAtiva(Boolean.TRUE.equals(request.ativa()));
 
     List<Faixa> faixas = request.categorias().stream()
         .flatMap(cat -> cat.faixas().stream()
@@ -44,7 +44,7 @@ public final class TabelaMapper {
         tabela.getId(),
         tabela.getNome(),
         tabela.getDataVigencia(),
-        tabela.getAtiva(),
+        tabela.isAtiva(),
         tabela.getFaixas().stream()
             .collect(Collectors.groupingBy(Faixa::getCategoria))
             .entrySet().stream()

@@ -1,7 +1,7 @@
 package com.ras.desafio_tarifa.api;
 
 import com.ras.desafio_tarifa.dto.request.TabelaTarifariaRequest;
-import com.ras.desafio_tarifa.TabelaTarifariaService;
+import com.ras.desafio_tarifa.aplicacao.TabelaTarifariaService;
 import com.ras.desafio_tarifa.dto.response.TabelaTarifariaResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
