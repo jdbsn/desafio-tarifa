@@ -1,13 +1,17 @@
 package com.ras.desafio_tarifa.dominio;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "faixa")
-@Data
 public class Faixa {
 
   @Id
