@@ -18,7 +18,8 @@ public class TabelaTarifariaService {
 
   private static final String MSG_SEM_FAIXAS = "A categoria %s deve possuir pelo menos uma faixa.";
 
-  private static final String MSG_INICIO_INVALIDO = "A primeira faixa da categoria %s deve iniciar em 0.";
+  private static final String MSG_INICIO_INVALIDO =
+      "A primeira faixa da categoria %s deve iniciar em 0.";
 
   private static final String MSG_FAIXA_INTERVALO_INVALIDO =
       "Intervalo da faixa na categoria %s inválido: valor inicial deve ser menor que o valor final.";
@@ -33,8 +34,8 @@ public class TabelaTarifariaService {
 
   @Transactional
   public TabelaTarifariaResponse criar(TabelaTarifariaRequest tabelaTarifaria) {
-    tabelaTarifaria.categorias().forEach(categoria ->
-        validarFaixas(categoria.faixas(), categoria.nome()));
+    tabelaTarifaria.categorias()
+        .forEach(categoria -> validarFaixas(categoria.faixas(), categoria.nome()));
 
     if (Boolean.TRUE.equals(tabelaTarifaria.ativa())) {
       tabelaRepo.findByAtivaTrue().ifPresent(t -> t.setAtiva(false));
@@ -48,9 +49,7 @@ public class TabelaTarifariaService {
   }
 
   public List<TabelaTarifariaResponse> listar() {
-    return tabelaRepo.findAll().stream()
-        .map(TabelaMapper::toResponse)
-        .toList();
+    return tabelaRepo.findAll().stream().map(TabelaMapper::toResponse).toList();
   }
 
   public void excluir(Long id) {
@@ -60,40 +59,39 @@ public class TabelaTarifariaService {
     tabelaRepo.delete(tabela);
   }
 
-      private void validarFaixas(List<TabelaTarifariaRequest.FaixaRequest> faixas, String categoria) {
+  private void validarFaixas(List<TabelaTarifariaRequest.FaixaRequest> faixas, String categoria) {
 
-        if (faixas == null || faixas.isEmpty()) {
-          throw new IllegalArgumentException(String.format(MSG_SEM_FAIXAS, categoria));
-        }
+    if (faixas == null || faixas.isEmpty()) {
+      throw new IllegalArgumentException(String.format(MSG_SEM_FAIXAS, categoria));
+    }
 
-        List<TabelaTarifariaRequest.FaixaRequest> ordenadas =
-            faixas.stream()
-                .sorted(Comparator.comparing(TabelaTarifariaRequest.FaixaRequest::inicio))
-                .toList();
+    List<TabelaTarifariaRequest.FaixaRequest> ordenadas =
+        faixas.stream().sorted(Comparator.comparing(TabelaTarifariaRequest.FaixaRequest::inicio))
+            .toList();
 
-        if (ordenadas.getFirst().inicio() != 0) {
-          throw new IllegalArgumentException(String.format(MSG_INICIO_INVALIDO, categoria));
-        }
+    if (ordenadas.getFirst().inicio() != 0) {
+      throw new IllegalArgumentException(String.format(MSG_INICIO_INVALIDO, categoria));
+    }
 
-        for (int i = 0; i < ordenadas.size(); i++) {
-          var atual = ordenadas.get(i);
+    for (int i = 0; i < ordenadas.size(); i++) {
+      var atual = ordenadas.get(i);
 
-          if (atual.inicio() >= atual.fim()) {
-            throw new IllegalArgumentException(String.format(MSG_FAIXA_INTERVALO_INVALIDO, categoria));
-          }
+      if (atual.inicio() >= atual.fim()) {
+        throw new IllegalArgumentException(String.format(MSG_FAIXA_INTERVALO_INVALIDO, categoria));
+      }
 
-          if (i > 0) {
-            var anterior = ordenadas.get(i - 1);
+      if (i > 0) {
+        var anterior = ordenadas.get(i - 1);
 
-            if (atual.inicio() != anterior.fim() + 1) {
-              throw new IllegalArgumentException(String.format(MSG_FAIXAS_DESCONTINUIDADE, categoria));
-            }
-          }
-        }
-
-        if (ordenadas.getLast().fim() < 99999) {
-          throw new IllegalArgumentException(String.format(MSG_COBERTURA_MAXIMA, categoria));
+        if (atual.inicio() != anterior.fim() + 1) {
+          throw new IllegalArgumentException(String.format(MSG_FAIXAS_DESCONTINUIDADE, categoria));
         }
       }
+    }
+
+    if (ordenadas.getLast().fim() < 99999) {
+      throw new IllegalArgumentException(String.format(MSG_COBERTURA_MAXIMA, categoria));
+    }
+  }
 
 }
