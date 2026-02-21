@@ -4,48 +4,53 @@ API REST desenvolvida com Java 21 e Spring Boot para gestão e cálculo de tarif
 
 O sistema é totalmente parametrizável, permitindo cadastrar novas tabelas tarifárias sem necessidade de alteração de código.
 
----
-
 ## 📋 Pré-requisitos
 
 - Java 21 (JDK)
 - PostgreSQL 14+
 - Maven ou Maven Wrapper
 
----
-
 ## ⚙️ Configuração da Base de Dados
 
-1. Crie um banco de dados no PostgreSQL:
+1. Crie o banco no PostgreSQL:
 
 desafio_tarifa_db
 
-2. Configure as variáveis de ambiente:
+2. Configure as credenciais no arquivo:
 
-DB_URL=jdbc:postgresql://localhost:5432/desafio_tarifa_db  
-DB_USERNAME=postgres  
-DB_PASSWORD=sua_senha
+src/main/resources/application.properties
 
-As tabelas serão criadas automaticamente na primeira execução através do Flyway.
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/desafio_tarifa_db
+spring.datasource.username=postgres
+spring.datasource.password=sua_senha
+```
 
----
+As tabelas serão criadas automaticamente na primeira execução via Flyway.
 
 ## 🚀 Instalação e Execução
 
 1. Clone o repositório:
-   git clone <url-do-repositorio>  
-   cd desafio-tarifa
+
+```
+git clone <url-do-repositorio>  
+cd desafio-tarifa  
+```
 
 2. Compile o projeto:
-   ./mvnw clean install
+
+```
+./mvnw clean install
+```
 
 3. Execute a aplicação:
-   DB_URL=jdbc:postgresql://localhost:5432/desafio_tarifa_db DB_USERNAME=postgres DB_PASSWORD=sua_senha ./mvnw spring-boot:run
+
+```
+./mvnw spring-boot:run  
+```
 
 A aplicação iniciará em:
 http://localhost:8080
-
----
 
 # 🔌 Endpoints
 
@@ -94,8 +99,6 @@ Response — 201 Created:
 }
 ```
 
----
-
 ## Listar Tabelas Tarifárias
 
 GET /api/tabelas-tarifarias
@@ -123,15 +126,11 @@ Response — 200 OK:
 ]
 ```
 
----
-
 ## Excluir Tabela Tarifária
 
 DELETE /api/tabelas-tarifarias/{id}
 
 Response — 204 No Content
-
----
 
 ## Calcular Tarifa
 
@@ -170,16 +169,12 @@ Response — 200 OK:
 }
 ```
 
----
-
 # 🧪 Como Testar a Aplicação
 
 - Utilize Postman, Insomnia ou curl
 - Cadastre uma tabela tarifária ativa
 - Execute o endpoint de cálculo
 - Verifique o detalhamento retornado
-
----
 
 # 📌 Regras de Negócio
 
